@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+/dist/
+/build/
+coverage/
+assets/styles/*.map
+
+# Logs
+npm-debug.log*
+yarn-*.log
+pnpm-debug.log*
+*.log
+
+# Environment
+.env
+.env.*
+
+# Caches
+.cache/
+.parcel-cache/
+.temp/
+.tailwind-cache/
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

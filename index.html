@@ -10,38 +10,51 @@
     name="viewport"
   />
 
-  <title>Home | JM Lim</title>
+  <title>Home | Jale Mark Lim</title>
 
-  <meta property="og:title" content="Home | JM Lim" />
+  <meta property="og:title" content="Home | Jale Mark Lim" />
 
   <meta property="og:locale" content="en_US" />
 
   <link
     rel="canonical"
-    href="//"
+    href="https://iamjmlim.github.io/portfolio/"
   />
 
   <meta
     property="og:url"
-    content="//"
+    content="https://iamjmlim.github.io/portfolio/"
   />
 
   <meta
     name="description"
-    content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    content="Full-Stack Developer with 7+ years of experience building and deploying scalable web applications. Strong background in frontend and backend technologies with a focus on clean architecture and business alignment."
   />
+  <meta name="author" content="Jale Mark Lim" />
 
   <link rel="icon" type="image/png" href="./assets/img/favicon.png" />
 
-  <meta name="theme-color" content="#5540af" />
+  <meta name="theme-color" content="#3b82f6" />
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light dark" />
 
-  <meta property="og:site_name" content="Atom Template" />
+  <meta property="og:site_name" content="Jale Mark Lim Portfolio" />
 
-  <meta property="og:image" content="./assets/img/myphoto.jpg" />
+  <meta property="og:image" content="https://iamjmlim.github.io/portfolio/assets/img/myphoto.jpg" />
 
   <meta name="twitter:card" content="summary_large_image" />
 
-  <meta name="twitter:site" content="@tailwindmade" />
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('theme');
+        var isDark = saved ? (saved === 'dark') : true; // default to dark when no saved preference
+        document.documentElement.classList.toggle('dark', isDark);
+      } catch (e) {}
+    })();
+  </script>
+
+  
 
   <link
     crossorigin="crossorigin"
@@ -66,6 +79,11 @@
   />
 
   <link
+    href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+    rel="stylesheet"
+  />
+
+  <link
     href="./assets/styles/main.min.css"
     media="screen"
     rel="stylesheet"
@@ -78,15 +96,25 @@
 
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+  <script defer src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
   
 </head>
 
 
   <body
     :class="{ 'overflow-hidden max-h-screen': mobileMenu }"
-    class="relative"
-    x-data="{ mobileMenu: false }"
+    class="relative bg-white dark:bg-black"
+    x-data="{ 
+      mobileMenu: false, 
+      darkMode: (localStorage.theme ? localStorage.theme === 'dark' : true)
+    }"
+    x-init="$watch('darkMode', val => { localStorage.theme = val ? 'dark' : 'light'; document.documentElement.classList.toggle('dark', val); })"
   >
+    <a href="#about" class="sr-only focus:not-sr-only absolute left-2 top-2 z-[100] inline-block rounded bg-primary px-3 py-2 text-white">Skip to content</a>
     
     <div id="main" class="relative">
       <div
@@ -100,20 +128,19 @@
     }
 }"
 >
-  <div class="w-full z-50 top-0 py-3 sm:py-5  absolute
-  ">
+  <div class="w-full z-50 top-0 py-3 sm:py-5 fixed backdrop-blur-md bg-black/30 dark:bg-black/60 border-b border-white/10">
   <div class="container flex items-center justify-between">
     <div>
-      <h1 class="text-2xl text-white font-semibold">My Portfolio</h1>
+      <h1 class="text-2xl text-white dark:text-yellow font-semibold">My Portfolio</h1>
     </div>
-    <div class="hidden lg:block">
+    <nav class="hidden lg:block" aria-label="Main">
       <ul class="flex items-center">
         
         <li class="group pl-6">
           
           <span
             @click="triggerNavItem('#about')"
-            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
+            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white dark:text-yellow"
             >About</span
           >
           
@@ -126,8 +153,8 @@
           
           <span
             @click="triggerNavItem('#services')"
-            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
-            >Services</span
+            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white dark:text-yellow"
+            >Skills</span
           >
           
           <span
@@ -139,7 +166,7 @@
           
           <span
             @click="triggerNavItem('#portfolio')"
-            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
+            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white dark:text-yellow"
             >Portfolio</span
           >
           
@@ -152,7 +179,7 @@
           
           <span
             @click="triggerNavItem('#work')"
-            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
+            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white dark:text-yellow"
             >Work</span
           >
           
@@ -165,7 +192,7 @@
           
           <span
             @click="triggerNavItem('#contact')"
-            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
+            class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white dark:text-yellow"
             >Contact</span
           >
           
@@ -175,11 +202,20 @@
         </li>
         
       </ul>
-    </div>
-    <div class="block lg:hidden">
-      <button @click="mobileMenu = true">
-        <i class="bx bx-menu text-4xl text-white"></i>
+    </nav>
+    <div class="flex items-center gap-4">
+      <button @click="darkMode = !darkMode" :aria-pressed="darkMode.toString()" aria-label="Toggle dark mode" class="hidden md:inline-flex items-center rounded-full border border-white/30 dark:border-yellow/50 px-3 py-1 text-sm text-white dark:text-yellow hover:bg-white/20 dark:hover:bg-yellow/20 transition">
+        <i :class="darkMode ? 'bx bx-sun' : 'bx bx-moon'" class="text-lg"></i>
+        <span class="ml-2" x-text="darkMode ? 'Light' : 'Dark'"></span>
       </button>
+      <button @click="darkMode = !darkMode" :aria-pressed="darkMode.toString()" class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/30 dark:border-yellow/50 text-white dark:text-yellow hover:bg-white/20 dark:hover:bg-yellow/20 transition" aria-label="Toggle dark mode">
+        <i :class="darkMode ? 'bx bx-sun' : 'bx bx-moon'" class="text-lg"></i>
+      </button>
+      <div class="block lg:hidden">
+        <button @click="mobileMenu = true">
+          <i class="bx bx-menu text-4xl text-white"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -215,7 +251,7 @@
         <span
           @click="triggerMobileNavItem('#services')"
           class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
-          >Services</span
+          >Skills</span
         >
         
       </li>
@@ -262,11 +298,12 @@
   style="background-image: url(./assets/img/bg-hero.jpg)"
 >
   <div
-    class="absolute inset-0 z-20 bg-gradient-to-r from-hero-gradient-from to-hero-gradient-to bg-cover bg-center bg-no-repeat"
+    class="absolute inset-0 z-20 bg-gradient-to-r from-hero-gradient-from to-hero-gradient-to dark:from-black/90 dark:to-black/90 bg-cover bg-center bg-no-repeat"
   ></div>
 
   <div
     class="container relative z-30 pt-20 pb-12 sm:pt-56 sm:pb-48 lg:pt-64 lg:pb-48"
+    data-aos="fade-up" data-aos-duration="800"
   >
     <div class="flex flex-col items-center justify-center lg:flex-row">
       <div class="rounded-full border-8 border-primary shadow-xl">
@@ -280,8 +317,19 @@
         <h1
           class="text-center font-header text-4xl text-white sm:text-left sm:text-5xl md:text-6xl"
         >
-          Hello I'm JM Lim!
+          Hello I'm Jale Mark Lim
         </h1>
+        <p class="mt-3 text-center sm:text-left text-white/80 text-lg md:text-xl">
+          Full-Stack Developer specialized in Laravel, Vue, and modern JavaScript frameworks.
+        </p>
+        <div class="mt-6 flex flex-col sm:flex-row items-center sm:items-start gap-4">
+          <a href="#portfolio" class="inline-flex items-center rounded-lg bg-primary px-5 py-3 font-semibold text-white shadow hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-yellow focus:ring-offset-2">
+            View Portfolio
+          </a>
+          <a href="./assets/Jale_Mark_Lim_Resume.pdf" download class="inline-flex items-center rounded-lg border border-white/30 bg-white/10 px-5 py-3 font-semibold text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-yellow focus:ring-offset-2">
+            Download Resume
+          </a>
+        </div>
         <div
           class="flex flex-col justify-center pt-3 sm:flex-row sm:pt-5 lg:justify-start"
         >
@@ -296,13 +344,13 @@
           <div
             class="flex items-center justify-center pt-5 pl-2 sm:justify-start sm:pt-0"
           >
-            <a href="https://wa.me/09682138620">
+            <a href="https://wa.me/639682138620" aria-label="WhatsApp">
               <i
                 class="bx bxl-whatsapp text-2xl text-white hover:text-yellow"
               ></i>
             </a>
             &nbsp;&nbsp;
-            <a href="mailto:jalemarklim.dev@gmail.com">
+            <a href="mailto:jalemarklim1996@gmail.com" aria-label="Email">
               <i
                 class="bx bx-envelope text-2xl text-white hover:text-yellow"
               ></i>
@@ -316,44 +364,45 @@
   </div>
 </div>
 
-<div class="bg-grey-50" id="about">
+<div class="bg-grey-50 dark:bg-secondary scroll-mt-24" id="about" data-aos="fade-up" data-aos-duration="800">
   <div class="container flex flex-col items-center py-16 md:py-20 lg:flex-row">
     <div class="w-full text-center sm:w-3/4 lg:w-3/5 lg:text-left">
       <h2
-        class="font-header text-4xl font-semibold uppercase text-primary sm:text-5xl lg:text-6xl"
+        class="font-header text-4xl font-semibold uppercase text-primary dark:text-yellow sm:text-5xl lg:text-6xl"
       >
         Who am I?
       </h2>
       <h4
-        class="pt-6 font-header text-xl font-medium text-black sm:text-2xl lg:text-3xl"
+        class="pt-6 font-header text-xl font-medium text-black dark:text-white sm:text-2xl lg:text-3xl"
       >
-        I'm JM Lim, a Full-stack Web Developer
+        I'm Jale Mark Lim, a Full-Stack Web Developer
       </h4>
-      <p class="pt-6 font-body leading-relaxed text-grey-20">
-        A highly analytical IT professional with huge knowledge in Web technologies and proficiency in
-        various frameworks.
+      <p class="pt-6 font-body leading-relaxed text-grey-20 dark:text-grey-70">
+        Full-Stack Developer with 7+ years of experience building and deploying scalable web applications.
+        Strong background in frontend and backend technologies with a focus on clean architecture and business
+        alignment.
       </p>
       <div
         class="flex flex-col justify-center pt-6 sm:flex-row lg:justify-start"
       >
         <div class="flex items-center justify-center sm:justify-start">
-          <p class="font-body text-lg font-semibold uppercase text-grey-20">
+          <p class="font-body text-lg font-semibold uppercase text-grey-20 dark:text-grey-70">
             Connect with me
           </p>
           <div class="hidden sm:block">
-            <i class="bx bx-chevron-right text-2xl text-primary"></i>
+            <i class="bx bx-chevron-right text-2xl text-primary dark:text-yellow"></i>
           </div>
         </div>
         <div
           class="flex items-center justify-center pt-5 pl-2 sm:justify-start sm:pt-0"
         >
-        <a href="https://wa.me/09682138620">
+        <a href="https://wa.me/639682138620" aria-label="WhatsApp">
           <i
             class="bx bxl-whatsapp text-2xl text-primary hover:text-yellow"
           ></i>
         </a>
         &nbsp;&nbsp;
-        <a href="mailto:jalemarklim.dev@gmail.com">
+        <a href="mailto:jalemarklim1996@gmail.com" aria-label="Email">
           <i
             class="bx bx-envelope text-2xl text-primary hover:text-yellow"
           ></i>
@@ -363,7 +412,7 @@
     </div>
     <div class="w-full pl-0 pt-10 sm:w-3/4 lg:w-2/5 lg:pl-12 lg:pt-0">
       <div class="flex flex-col items-center">
-        <a href="./assets/Jale_Mark_Lim_Resume.pdf" download class="inline-block px-6 py-3 font-semibold rounded-lg bg-primary text-white hover:bg-yellow transition-colors shadow focus:outline-none focus:ring-2 focus:ring-yellow focus:ring-offset-2">
+        <a href="./assets/Jale_Mark_Lim_Resume.pdf" download class="inline-block px-6 py-3 font-semibold rounded-lg bg-primary text-white hover:bg-[#2563eb] transition-colors shadow focus:outline-none focus:ring-2 focus:ring-yellow focus:ring-offset-2">
           Download PDF Resume
         </a>
       </div>
@@ -374,144 +423,84 @@
   </div>
 </div>
 
-<div class="container py-16 md:py-20" id="services">
+<div class="container py-16 md:py-20 scroll-mt-24" id="services" data-aos="fade-up" data-aos-duration="800" x-data='{
+  skills: [
+    { title: "LANGUAGES", iconBlack: "./assets/img/icon-development-black.svg", iconWhite: "./assets/img/icon-development-white.svg", items: "PHP, JavaScript, HTML5, CSS3." },
+    { title: "FRAMEWORKS", iconBlack: "./assets/img/icon-graphics-black.svg", iconWhite: "./assets/img/icon-graphics-white.svg", items: "Laravel, Vue.js, Bootstrap, Tailwind, Next.js, Nuxt.js." },
+    { title: "DATABASE", iconBlack: "./assets/img/icon-development-black.svg", iconWhite: "./assets/img/icon-development-white.svg", items: "MySQL." },
+    { title: "TOOLS", iconBlack: "./assets/img/icon-graphics-black.svg", iconWhite: "./assets/img/icon-graphics-white.svg", items: "Git, Azure DevOps, Cursor AI, AWS, Linux." },
+    { title: "CMS/DESIGN", iconBlack: "./assets/img/icon-development-black.svg", iconWhite: "./assets/img/icon-development-white.svg", items: "WordPress, SilverStripe." }
+  ]
+}'>
   <h2
-    class="text-center font-header text-4xl font-semibold uppercase text-primary sm:text-5xl lg:text-6xl"
+    class="text-center font-header text-4xl font-semibold uppercase text-primary dark:text-yellow sm:text-5xl lg:text-6xl"
   >
-    Here's what I'm good at
+    Technical Skills
   </h2>
   <h3
-    class="pt-6 text-center font-header text-xl font-medium text-black sm:text-2xl lg:text-3xl"
+    class="pt-6 text-center font-header text-xl font-medium text-black dark:text-white sm:text-2xl lg:text-3xl"
   >
-    These are the services I offer
+    Core technologies and tools
   </h3>
 
-  <div
-    class="grid grid-cols-1 gap-6 pt-10 sm:grid-cols-2 md:gap-10 md:pt-12 lg:grid-cols-3"
-  >
-    <div class="group rounded px-8 py-12 shadow hover:bg-primary">
-      <div class="mx-auto h-24 w-24 text-center xl:h-28 xl:w-28">
-        <div class="hidden group-hover:block">
-          <img
-            src="./assets/img/icon-development-white.svg"
-            alt="development icon"
-          />
+  <div class="grid grid-cols-1 gap-6 pt-10 sm:grid-cols-2 md:gap-10 md:pt-12 lg:grid-cols-3">
+    <template x-for="(skill, i) in skills" :key="skill.title">
+      <div class="group relative rounded-xl px-8 py-12 border border-black/5 dark:border-white/10 bg-white/90 dark:bg-white/5 hover:bg-black/80 dark:hover:bg-black/40 backdrop-blur-sm shadow-sm hover:shadow-lg transition duration-300 ease-out hover:-translate-y-1 hover:border-primary/30 dark:hover:border-yellow/30" data-aos="fade-up" x-bind:data-aos-delay="i * 100">
+        <div class="mx-auto h-24 w-24 xl:h-28 xl:w-28 flex items-center justify-center">
+          <img :src="skill.iconBlack" :alt="skill.title + ' icon'" class="h-12 w-12 sm:h-14 sm:w-14 xl:h-16 xl:w-16 object-contain dark:hidden group-hover:hidden" />
+          <img :src="skill.iconWhite" :alt="skill.title + ' icon'" class="h-12 w-12 sm:h-14 sm:w-14 xl:h-16 xl:w-16 object-contain hidden dark:block group-hover:block" />
         </div>
-        <div class="block group-hover:hidden">
-          <img
-            src="./assets/img/icon-development-black.svg"
-            alt="development icon"
-          />
+        <div class="text-center">
+          <h3 class="pt-8 text-lg font-semibold uppercase text-primary dark:text-yellow group-hover:text-yellow lg:text-xl tracking-wide" x-text="skill.title"></h3>
+          <p class="text-grey-20 pt-4 text-sm group-hover:text-white md:text-base dark:text-grey-70" x-text="skill.items"></p>
         </div>
       </div>
-      <div class="text-center">
-        <h3
-          class="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl"
-        >
-          WEB DEVELOPMENT
-        </h3>
-        <p class="text-grey pt-4 text-sm group-hover:text-white md:text-base">
-          Expert in developing web applications using Laravel, TailwindCSS and VueJS.          
-        </p>
-      </div>
-    </div>
-    
-    <div class="group rounded px-8 py-12 shadow hover:bg-primary">
-      <div class="mx-auto h-24 w-24 text-center xl:h-28 xl:w-28">
-        <div class="hidden group-hover:block">
-          <img
-            src="./assets/img/icon-graphics-white.svg"
-            alt="Graphic Design icon"
-          />
-        </div>
-        <div class="block group-hover:hidden">
-          <img
-            src="./assets/img/icon-graphics-black.svg"
-            alt="Graphic Design icon"
-          />
-        </div>
-      </div>
-      <div class="text-center">
-        <h3
-          class="pt-8 text-lg font-semibold uppercase text-primary group-hover:text-yellow lg:text-xl"
-        >
-          Web Design
-        </h3>
-        <p class="text-grey pt-4 text-sm group-hover:text-white md:text-base">
-          Design experience using Figma & Uizard.
-        </p>
-      </div>
-    </div>
+    </template>
   </div>
 </div>
 
-<div class="container py-16 md:py-20" id="portfolio">
+<div class="container py-16 md:py-20 scroll-mt-24" id="portfolio" data-aos="fade-up" data-aos-duration="800" x-data='{
+  projects: [
+    { title: "Primo Oils", url: "https://primooils.com/", img: "./assets/img/primooils.png" },
+    { title: "Stronghold Safety", url: "https://strongholdsafety.com.au", img: "./assets/img/stronghold.png" },
+    { title: "Minecon", url: "https://www.minecon.nu", img: "./assets/img/minecon.png" },
+    { title: "Get Social Happy", url: "https://getsocialhappy.com/", img: "./assets/img/getsocialhappy.png" }
+  ]
+}'>
   <h2
-    class="text-center font-header text-4xl font-semibold uppercase text-primary sm:text-5xl lg:text-6xl"
+    class="text-center font-header text-4xl font-semibold uppercase text-primary dark:text-yellow sm:text-5xl lg:text-6xl"
   >
     Check out my Portfolio
   </h2>
   <h3
-    class="pt-6 text-center font-header text-xl font-medium text-black sm:text-2xl lg:text-3xl"
+    class="pt-6 text-center font-header text-xl font-medium text-black dark:text-white sm:text-2xl lg:text-3xl"
   >
     Here's what I have done with the past
   </h3>
 
-  <div
-    class="mx-auto grid w-full grid-cols-1 gap-8 pt-12 sm:w-3/4 md:gap-10 lg:w-full lg:grid-cols-2"
-  >
-    <a
-      href="https://primooils.com/" target="_blank"
-      class="mx-auto transform transition-all hover:scale-105 md:mx-0"
-    >
-      <img
-        src="./assets/img/primooils.png"
-        class="w-full shadow"
-        alt="portfolio image"
-      />
-    </a>
-    <a
-      href="https://strongholdsafety.com.au" target="_blank"
-      class="mx-auto transform transition-all hover:scale-105 md:mx-0"
-    >
-      <img
-        src="./assets/img/stronghold.png"
-        class="w-full shadow"
-        alt="portfolio image"
-      />
-    </a>
-    <a
-      href="https://www.minecon.nu" target="_blank"
-      class="mx-auto transform transition-all hover:scale-105 md:mx-0"
-    >
-      <img
-        src="./assets/img/minecon.png"
-        class="w-full shadow"
-        alt="portfolio image"
-      />
-    </a>
-    <a
-      href="https://getsocialhappy.com/" target="_blank"
-      class="mx-auto transform transition-all hover:scale-105 md:mx-0"
-    >
-      <img
-        src="./assets/img/getsocialhappy.png"
-        class="w-full shadow"
-        alt="portfolio image"
-      />
-    </a>
+  <div class="mx-auto grid w-full grid-cols-1 gap-8 pt-12 sm:w-3/4 md:gap-10 lg:w-full lg:grid-cols-2">
+    <template x-for="(project, i) in projects" :key="project.title">
+      <a :href="project.url" target="_blank" rel="noopener noreferrer" class="group relative block mx-auto md:mx-0 rounded-xl overflow-hidden border border-black/5 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-sm shadow-sm hover:shadow-lg transition duration-300 hover:-translate-y-1" data-aos="zoom-in" x-bind:data-aos-delay="i * 100">
+        <img :src="project.img" loading="lazy" class="w-full aspect-video object-cover opacity-95 group-hover:opacity-100 transition" :alt="project.title + ' website screenshot'" />
+        <div class="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+          <div class="w-full p-4">
+            <p class="text-white font-semibold" x-text="project.title"></p>
+          </div>
+        </div>
+      </a>
+    </template>
   </div>
 </div>
 
 
-<div class="container py-16 md:py-20" id="work">
+<div class="container py-16 md:py-20 scroll-mt-24" id="work" data-aos="fade-up" data-aos-duration="800">
   <h2
-    class="text-center font-header text-4xl font-semibold uppercase text-primary sm:text-5xl lg:text-6xl"
+    class="text-center font-header text-4xl font-semibold uppercase text-primary dark:text-yellow sm:text-5xl lg:text-6xl"
   >
     My work experience
   </h2>
   <h3
-    class="pt-6 text-center font-header text-xl font-medium text-black sm:text-2xl lg:text-3xl"
+    class="pt-6 text-center font-header text-xl font-medium text-black dark:text-white sm:text-2xl lg:text-3xl"
   >
     Here's what I did before freelancing
   </h3>
@@ -544,21 +533,15 @@
             <i class="bx bxs-right-arrow hidden text-primary md:block"></i>
             <div class="md:-mt-1 md:pl-8">
               <span class="block font-body font-bold text-grey-40"
-                >June 2017 - April 2019</span
+                >Jun 2017 - Apr 2019</span
               >
               <span
                 class="block pt-2 font-header text-xl font-bold uppercase text-primary"
-                >Full-stack Developer</span
-              >
-              <div class="pt-2">
+                >Web Developer</span>
+              <div class="pt-2 font-body leading-relaxed text-grey-20 dark:text-grey-70">
                 <ul style="list-style-type:circle">
-                  <li>Develop websites and systems using HTML5, CSS3, JavaScript, PHP, MySQL</li>
-                  <li>Experienced in using frameworks such as Laravel 5, Vue JS, Bootstrap, Silverstripe</li>
-                  <li>Code and deploy website applications in a cross-browser environment</li>
-                  <li>Collaborate with designers to create clean user interfaces</li>
-                  <li>Coordinate with clients on any proposed changes</li>
+                  <li>Built Laravel/Vue-based websites and collaborated with UI/UX teams.</li>
                 </ul>
-                
               </div>
             </div>
           </div>
@@ -569,7 +552,7 @@
       <div class="md:w-2/5">
         <div class="flex justify-center md:justify-start">
           <span class="shrink-0 font-semibold text-xl text-grey-10">
-            University of the Philippines Manila
+            UP Manila
           </span>
           <div class="relative ml-3 hidden w-full md:block">
             <span
@@ -588,15 +571,13 @@
             <i class="bx bxs-right-arrow hidden text-primary md:block"></i>
             <div class="md:-mt-1 md:pl-8">
               <span class="block font-body font-bold text-grey-40"
-                >July 2018 - December 2018</span
-              >
+                >Jul 2018 - Dec 2018</span>
               <span
                 class="block pt-2 font-header text-xl font-bold uppercase text-primary"
-                >Senior Project Assistant</span
-              >
-              <div class="pt-2">
+                >Sr. Project Assistant</span>
+              <div class="pt-2 font-body leading-relaxed text-grey-20 dark:text-grey-70">
                 <ul style="list-style-type:circle">
-                  <li>Developer of Philippine Journal of Health Research and Development (Publication System)</li>
+                  <li>Developed medical journal publication system.</li>
                 </ul>
               </div>
             </div>
@@ -608,7 +589,7 @@
       <div class="md:w-2/5">
         <div class="flex justify-center md:justify-start">
           <span class="shrink-0 font-semibold text-xl text-grey-10">
-            Diversified Robotic
+            Diversified Robotic Inc.
           </span>
           <div class="relative ml-3 hidden w-full md:block">
             <span
@@ -627,20 +608,13 @@
             <i class="bx bxs-right-arrow hidden text-primary md:block"></i>
             <div class="md:-mt-1 md:pl-8">
               <span class="block font-body font-bold text-grey-40"
-                >April 2019 - June 2020</span
-              >
+                >Apr 2019 - Jun 2020</span>
               <span
                 class="block pt-2 font-header text-xl font-bold uppercase text-primary"
-                >Technology Design Engineer</span
-              >
-              <div class="pt-2">
+                >Tech Design Engineer</span>
+              <div class="pt-2 font-body leading-relaxed text-grey-20 dark:text-grey-70">
                 <ul style="list-style-type:circle">
-                  <li>Analyze the ideas, business models, and requirements to build a custom web solution</li>
-                  <li>Develop internal and client projects</li>
-                  <li>Manage AWS services such as EC2, RDS, S3, SNS, etc.</li>
-                  <li>Code and deploy website applications in a cross-browser environment</li>
-                  <li>Deploy and install applications to AWS servers</li>
-                  <li>Meet client expectations and project deadlines</li>
+                  <li>Developed Laravel-based web platforms for internal and client use.</li>
                 </ul>
               </div>
             </div>
@@ -652,7 +626,7 @@
       <div class="md:w-2/5">
         <div class="flex justify-center md:justify-start">
           <span class="shrink-0 font-semibold text-xl text-grey-10">
-            Diversified Robotic
+            Diversified Robotic Inc.
           </span>
           <div class="relative ml-3 hidden w-full md:block">
             <span
@@ -671,17 +645,15 @@
             <i class="bx bxs-right-arrow hidden text-primary md:block"></i>
             <div class="md:-mt-1 md:pl-8">
               <span class="block font-body font-bold text-grey-40"
-                >July 2020 - Present</span
-              >
+                >Jul 2020 - Jun 2025</span>
               <span
                 class="block pt-2 font-header text-xl font-bold uppercase text-primary"
-                >Director of Technology Design Engineering</span
-              >
-              <div class="pt-2">
+                >Director of Tech Design Engineering</span>
+              <div class="pt-2 font-body leading-relaxed text-grey-20 dark:text-grey-70">
                 <ul style="list-style-type:circle">
-                  <li>Work closely with the senior web developers to plan and document technical specifications for new applications</li>
-                  <li>Helping the development team in the design, development, coding, testing and debugging of applications</li>
-                  <li>Regularly meeting with the clients to set their expectations and align their business models to the solution</li>
+                  <li>Led architecture design and team mentoring.</li>
+                  <li>Integrated Nuxt.js and Next.js into new projects.</li>
+                  <li>Translated business needs into technical solutions.</li>
                 </ul>
               </div>
             </div>
@@ -692,46 +664,40 @@
   </div>
 </div>
 
-<div class="container py-16 md:py-20" id="contact">
-  <h2 class="text-primary font-semibold text-xl">My Contacts</h2>
-  <div class="flex flex-col pt-5 lg:flex-row">
-    <div
-      class="w-full border-l-2 border-t-2 border-r-2 border-b-2 border-grey-60 px-6 py-6 sm:py-8 lg:w-1/3"
-    >
+<div class="container py-16 md:py-20 scroll-mt-24" id="contact" data-aos="fade-up" data-aos-duration="800">
+  <h2 class="text-primary dark:text-yellow font-semibold text-xl">My Contacts</h2>
+  <div class="flex flex-col pt-5 lg:flex-row gap-4">
+    <div class="w-full lg:w-1/3 rounded-xl border border-black/5 dark:border-white/10 bg-white/90 dark:bg-white/5 px-6 py-6 sm:py-8 shadow-sm hover:shadow-lg transition">
       <div class="flex items-center">
-        <i class="bx bxl-whatsapp text-2xl text-grey-40"></i>
-        <p class="pl-2 font-body font-bold uppercase text-grey-40 lg:text-lg">
+        <i class="bx bxl-whatsapp text-2xl text-grey-40 dark:text-grey-70"></i>
+        <p class="pl-2 font-body font-bold uppercase text-grey-40 dark:text-grey-70 lg:text-lg">
           My Whatsapp
         </p>
       </div>
-      <p class="pt-2 text-left font-body font-bold text-primary lg:text-lg">
-        <a href="https://wa.me/09682138620">(+63) 968 213 8620</a>
+      <p class="pt-2 text-left font-body font-bold text-primary dark:text-yellow lg:text-lg">
+        <a href="https://wa.me/639682138620">(+63) 968 213 8620</a>
       </p>
     </div>
-    <div
-      class="w-full border-l-2 border-t-0 border-r-2 border-b-2 border-grey-60 px-6 py-6 sm:py-8 lg:w-1/3 lg:border-l-0 lg:border-t-2"
-    >
+    <div class="w-full lg:w-1/3 rounded-xl border border-black/5 dark:border-white/10 bg-white/90 dark:bg-white/5 px-6 py-6 sm:py-8 shadow-sm hover:shadow-lg transition">
       <div class="flex items-center">
-        <i class="bx bx-envelope text-2xl text-grey-40"></i>
-        <p class="pl-2 font-body font-bold uppercase text-grey-40 lg:text-lg">
+        <i class="bx bx-envelope text-2xl text-grey-40 dark:text-grey-70"></i>
+        <p class="pl-2 font-body font-bold uppercase text-grey-40 dark:text-grey-70 lg:text-lg">
           My Email
         </p>
       </div>
-      <p class="pt-2 text-left font-body font-bold text-primary lg:text-lg">
-        <a href="mailto:jalemarklim.dev@gmail.com">jalemarklim.dev@gmail.com</a>
+      <p class="pt-2 text-left font-body font-bold text-primary dark:text-yellow lg:text-lg">
+        <a href="mailto:jalemarklim1996@gmail.com">jalemarklim1996@gmail.com</a>
       </p>
     </div>
-    <div
-      class="w-full border-l-2 border-t-0 border-r-2 border-b-2 border-grey-60 px-6 py-6 sm:py-8 lg:w-1/3 lg:border-l-0 lg:border-t-2"
-    >
+    <div class="w-full lg:w-1/3 rounded-xl border border-black/5 dark:border-white/10 bg-white/90 dark:bg-white/5 px-6 py-6 sm:py-8 shadow-sm hover:shadow-lg transition">
       <div class="flex items-center">
-        <i class="bx bx-map text-2xl text-grey-40"></i>
-        <p class="pl-2 font-body font-bold uppercase text-grey-40 lg:text-lg">
+        <i class="bx bx-map text-2xl text-grey-40 dark:text-grey-70"></i>
+        <p class="pl-2 font-body font-bold uppercase text-grey-40 dark:text-grey-70 lg:text-lg">
           My Address
         </p>
       </div>
-      <p class="pt-2 text-left font-body font-bold text-primary lg:text-lg">
-        Manila City, Philippines
+      <p class="pt-2 text-left font-body font-bold text-primary dark:text-yellow lg:text-lg">
+        Abangan Sur, Marilao, Bulacan
       </p>
     </div>
   </div>
@@ -740,21 +706,21 @@
 
 </div>
 
-      <div class="bg-primary">
+      <div class="bg-primary dark:bg-secondary">
   <div class="container flex flex-col justify-between py-6 sm:flex-row">
-    <p class="text-center font-body text-white md:text-left">
-      © Copyright 2023. All right reserved.
+    <p class="text-center font-body text-white/80 dark:text-grey-70 md:text-left">
+      © Copyright 2025. All rights reserved.
     </p>
     <div class="flex items-center justify-center pt-5 sm:justify-start sm:pt-0">
-      <a href="https://wa.me/09682138620">
+      <a href="https://wa.me/639682138620" aria-label="WhatsApp">
         <i
-          class="bx bxl-whatsapp text-2xl text-white hover:text-yellow"
+          class="bx bxl-whatsapp text-2xl text-white dark:text-grey-70 hover:text-yellow"
         ></i>
       </a>
       &nbsp;&nbsp;
-      <a href="mailto:jalemarklim.dev@gmail.com">
+      <a href="mailto:jalemarklim1996@gmail.com" aria-label="Email">
         <i
-          class="bx bx-envelope text-2xl text-white hover:text-yellow"
+          class="bx bx-envelope text-2xl text-white dark:text-grey-70 hover:text-yellow"
         ></i>
       </a>
     </div>
@@ -764,6 +730,16 @@
     </div>
 
     <script src="./assets/js/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.AOS && typeof AOS.init === 'function') {
+          var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!prefersReduced) {
+            AOS.init({ once: true, offset: 40, duration: 800, easing: 'ease-out' });
+          }
+        }
+      });
+    </script>
 
     
   </body>

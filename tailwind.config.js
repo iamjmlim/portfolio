@@ -1,6 +1,7 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
+  darkMode: "class",
   content: ["./**/*.html"],
   safelist: ["active"],
   theme: {
@@ -16,7 +17,7 @@ module.exports = {
 
     colors: {
       transparent: "transparent",
-      primary: "#5540af",
+      primary: "#3b82f6",
       secondary: "#252426",
       white: "#ffffff",
       black: "#000000",
@@ -29,8 +30,8 @@ module.exports = {
       "grey-50": "#f4f3f8",
       "grey-60": "#edebf6",
       "grey-70": "#d8d8d8",
-      "hero-gradient-from": "rgba(85, 64, 174, 0.95)",
-      "hero-gradient-to": "rgba(65, 47, 144, 0.93)",
+      "hero-gradient-from": "rgba(59, 130, 246, 0.95)",
+      "hero-gradient-to": "rgba(29, 78, 216, 0.93)",
       "blog-gradient-from": "#8f9098",
       "blog-gradient-to": "#222222",
     },
