@@ -48,7 +48,8 @@
     (function() {
       try {
         var saved = localStorage.getItem('theme');
-        var isDark = saved ? (saved === 'dark') : true; // default to dark when no saved preference
+        var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDark = saved ? (saved === 'dark') : systemPrefersDark;
         document.documentElement.classList.toggle('dark', isDark);
       } catch (e) {}
     })();
@@ -100,6 +101,7 @@
 
   <style>
     html { scroll-behavior: smooth; }
+    [x-cloak] { display: none !important; }
   </style>
   
 </head>
@@ -110,9 +112,20 @@
     class="relative bg-white dark:bg-black"
     x-data="{ 
       mobileMenu: false, 
-      darkMode: (localStorage.theme ? localStorage.theme === 'dark' : true)
+      darkMode: (function(){
+        var saved = localStorage.theme;
+        if (saved) { return saved === 'dark'; }
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      })()
     }"
-    x-init="$watch('darkMode', val => { localStorage.theme = val ? 'dark' : 'light'; document.documentElement.classList.toggle('dark', val); })"
+    x-init="
+      $watch('darkMode', val => { 
+        localStorage.theme = val ? 'dark' : 'light'; 
+        document.documentElement.classList.toggle('dark', val);
+        var themeMeta = document.querySelector('meta[name=\'theme-color\']');
+        if (themeMeta) { themeMeta.setAttribute('content', val ? '#000000' : '#3b82f6'); }
+      });
+    "
   >
     <a href="#about" class="sr-only focus:not-sr-only absolute left-2 top-2 z-[100] inline-block rounded bg-primary px-3 py-2 text-white">Skip to content</a>
     
@@ -221,74 +234,73 @@
 </div>
 
 <div
-  class="pointer-events-none fixed inset-0 z-70 min-h-screen bg-black bg-opacity-70 opacity-0 transition-opacity lg:hidden"
-  :class="{ 'opacity-100 pointer-events-auto': mobileMenu }"
+  x-cloak
+  x-show="mobileMenu"
+  x-effect="if (mobileMenu) $nextTick(() => $refs.closeBtn && $refs.closeBtn.focus())"
+  @keydown.escape.window="mobileMenu = false"
+  @click.self="mobileMenu = false"
+  class="fixed inset-0 z-70 min-h-screen bg-black/70 backdrop-blur-sm lg:hidden"
+  x-transition:enter="transition ease-out duration-200"
+  x-transition:enter-start="opacity-0"
+  x-transition:enter-end="opacity-100"
+  x-transition:leave="transition ease-in duration-150"
+  x-transition:leave-start="opacity-100"
+  x-transition:leave-end="opacity-0"
+  role="dialog" aria-modal="true" aria-label="Mobile navigation"
 >
   <div
-    class="absolute right-0 min-h-screen w-2/3 bg-primary py-4 px-8 shadow md:w-1/3"
+    x-show="mobileMenu"
+    x-transition:enter="transform transition ease-out duration-200"
+    x-transition:enter-start="translate-x-full"
+    x-transition:enter-end="translate-x-0"
+    x-transition:leave="transform transition ease-in duration-150"
+    x-transition:leave-start="translate-x-0"
+    x-transition:leave-end="translate-x-full"
+    class="absolute right-0 min-h-screen w-4/5 sm:w-2/3 md:w-1/3 bg-white dark:bg-secondary border-l border-black/10 dark:border-white/10 py-4 px-6 sm:px-8 shadow-xl"
   >
-    <button
-      class="absolute top-0 right-0 mt-4 mr-4"
-      @click="mobileMenu = false"
-    >
-      <img src="./assets/img/icon-close.svg" class="h-10 w-auto" alt="" />
-    </button>
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-black dark:text-white">Menu</h2>
+      <button
+        x-ref="closeBtn"
+        class="inline-flex items-center justify-center rounded-md p-2 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary"
+        @click="mobileMenu = false"
+        aria-label="Close menu"
+      >
+        <i class="bx bx-x text-3xl"></i>
+      </button>
+    </div>
 
-    <ul class="mt-8 flex flex-col">
+    <ul class="mt-6 flex flex-col">
       
-      <li class="py-2">
-        
-        <span
-          @click="triggerMobileNavItem('#about')"
-          class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
-          >About</span
-        >
-        
+      <li class="py-1">
+        <button type="button" @click="triggerMobileNavItem('#about')" class="w-full text-left cursor-pointer px-2 py-2 rounded font-header font-semibold uppercase text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary">About</button>
       </li>
       
-      <li class="py-2">
-        
-        <span
-          @click="triggerMobileNavItem('#services')"
-          class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
-          >Skills</span
-        >
-        
+      <li class="py-1">
+        <button type="button" @click="triggerMobileNavItem('#services')" class="w-full text-left cursor-pointer px-2 py-2 rounded font-header font-semibold uppercase text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary">Skills</button>
       </li>
       
-      <li class="py-2">
-        
-        <span
-          @click="triggerMobileNavItem('#portfolio')"
-          class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
-          >Portfolio</span
-        >
-        
+      <li class="py-1">
+        <button type="button" @click="triggerMobileNavItem('#portfolio')" class="w-full text-left cursor-pointer px-2 py-2 rounded font-header font-semibold uppercase text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary">Portfolio</button>
       </li>
 
       
-      <li class="py-2">
-        
-        <span
-          @click="triggerMobileNavItem('#work')"
-          class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
-          >Work</span
-        >
-        
+      <li class="py-1">
+        <button type="button" @click="triggerMobileNavItem('#work')" class="w-full text-left cursor-pointer px-2 py-2 rounded font-header font-semibold uppercase text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary">Work</button>
       </li>
       
       
-      <li class="py-2">
-        
-        <span
-          @click="triggerMobileNavItem('#contact')"
-          class="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white"
-          >Contact</span
-        >
-        
+      <li class="py-1">
+        <button type="button" @click="triggerMobileNavItem('#contact')" class="w-full text-left cursor-pointer px-2 py-2 rounded font-header font-semibold uppercase text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-secondary">Contact</button>
       </li>
       
     </ul>
+    <div class="mt-6 border-t border-black/10 dark:border-white/10 pt-4">
+      <button @click="darkMode = !darkMode" :aria-pressed="darkMode.toString()" class="w-full inline-flex items-center justify-center rounded-lg border border-black/20 dark:border-yellow/50 px-4 py-2 text-sm text-black dark:text-yellow hover:bg-black/10 dark:hover:bg-yellow/20 transition" aria-label="Toggle dark mode">
+        <i :class="darkMode ? 'bx bx-sun' : 'bx bx-moon'" class="text-lg"></i>
+        <span class="ml-2" x-text="darkMode ? 'Light mode' : 'Dark mode'"></span>
+      </button>
+    </div>
   </div>
 </div>
 
